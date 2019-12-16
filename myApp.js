@@ -1,101 +1,42 @@
+const mongoose = require('mongoose')
+mongoose.connect(process.env.MLAB_URI || 'mongodb://localhost/exercise-track' )
+const Schema = mongoose.Schema;
 
-var express = require('express');
-var app = express();
-var bodyParser = require("body-parser");
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
 
-// --> 7)  Mount the Logger middleware here
-app.use(function(req, res, next) {
-  console.log(req.method + " " + req.path + " - " + req.ip);
-  next();
-})
-
-// --> 11)  Mount the body-parser middleware  here
-app.use(bodyParser.urlencoded({ extended: false }));
-
-
-/** 1) Meet the node console. */
-console.log("Hello World");
-
-
-/** 2) A first working Express Server */
-app.get('/hello', function(req, res) {
-  res.send('Hello Express');
+db.once('open', function() {
+  console.log("Connection Successful!");
 });
 
-
-/** 3) Serve an HTML file */
-app.get('/', function(req, res) {
-  let path = __dirname + "/views/index.html"
-
-  res.sendFile(path);
+const urlSchema = new Schema({
+  url: { type: String, required: true },
+  url_short: { type: Number, required: true }
 });
 
-/** 4) Serve static assets  */
-app.use(express.static(__dirname + '/public'));
+var URL = mongoose.model("URL", urlSchema);
 
-
-/** 5) serve JSON on a specific route */
-app.get('/json', function(req, res) {
+var createAndSaveURL = function(done, url) {
+  URL.findOne({'url': url}, function(err,obj) { 
+    if (err) return console.error(err);
+    
+    console.log("inside")
+    
+    
+  });
   
-  if (process.env.MESSAGE_STYLE == 'uppercase') {
-    res.json({"message": "HELLO JSON"} )
-  } else {
-    res.json({"message": "Hello json"} )
-  }
+  console.log('outside')
   
-});
+  /*
+  const me = new URL({url: url});
+  me.save(function(err, data) {
+    if (err) return console.error(err);
+    done(null, data)
+  });
+  */
+};
 
-/** 6) Use the .env file to configure the app */
- 
- 
-/** 7) Root-level Middleware - A logger */
-//  place it before all the routes !
+exports.createAndSaveURL = createAndSaveURL
 
-
-/** 8) Chaining middleware. A Time server */
-app.get('/now',function(req, res, next) {
-  req.time = new Date().toString();  // Hypothetical synchronous operation
-  next();
-}, function(req, res) {
-  res.send({time: req.time});
-});
-
-/** 9)  Get input from client - Route parameters */
-app.get('/:word/echo', function(req, res) {
-  res.send({echo: req.params.word});
-});
-
-/** 10) Get input from client - Query parameters */
-// /name?first=<firstname>&last=<lastname>
-function name(req, res){
-  let name = req.query.first + " " + req.query.last; 
-  res.json({
-    name: name
-  })
-}
-
-app.route('/name').get((req, res) => {
-  name(req,res);
-}).post((req, res) => {
-  let name = req.body.first + " " + req.body.last; 
-  res.json({
-    name: name
-  })
-})
-
-  
-/** 11) Get ready for POST Requests - the `body-parser` */
-// place it before all the routes !
-
-
-/** 12) Get data form POST  */
-
-
-
-// This would be part of the basic setup of an Express app
-// but to allow FCC to run tests, the server is already active
-/** app.listen(process.env.PORT || 3000 ); */
-
-//---------- DO NOT EDIT BELOW THIS LINE --------------------
-
- module.exports = app;
+exports.URLModel = URL;
+exports.mongoose = mongoose
