@@ -1,17 +1,29 @@
 {
-	"name": "fcc-learn-node-with-express",
-	"version": "0.1.0",
-	"dependencies": {
-		"express": "^4.17.1",
-		"body-parser": "^1.19.0",
-		"cookie-parser": "^1.4.3",
-		"fcc-express-bground": "https://github.com/Em-Ant/fcc-express-bground-pkg.git"
-	},
-	"main": "server.js",
-	"scripts": {
-		"start": "node server.js"
-	},
-	"engines": {
-		"node": "4.4.5"
-	}
+  "name": "shorturl",
+  "version": "0.0.1",
+  "description": "API project for freeCodeCamp",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.0.0-alpha.2",
+    "mongodb": "^3.4.0",
+    "mongoose": "^5.8.0",
+    "cors": "^2.8.5",
+    "body-parser": "^1.19.0"
+  },
+  "engines": {
+    "node": "4.4.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://hyperdev.com/#!/project/welcome-project"
+  },
+  "keywords": [
+    "node",
+    "hyperdev",
+    "express"
+  ],
+  "license": "MIT"
 }
